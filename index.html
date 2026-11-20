@@ -40,27 +40,49 @@
     <!-- Info jumlah -->
     <div class="info-jumlah" id="infoJumlah"></div>
 
-    <!-- Tabel Jadwal -->
-    <div class="table-wrapper">
-      <table class="jadwal-table">
-        <thead>
-          <tr>
-            <th class="col-foto">Foto</th>
-            <th>Dokter Spesialis</th>
-            <th>Poli</th>
-            <th>Hari</th>
-            <th class="col-jam">Jam Praktik</th>
-          </tr>
-        </thead>
-        <tbody id="tabelJadwal">
-          <tr>
-            <td colspan="5" class="loading">
-              <div class="spinner"></div>
-              <p>Memuat jadwal dokter...</p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Dua tabel berdampingan -->
+    <div class="tabel-grid">
+      <div class="table-wrapper">
+        <table class="jadwal-table">
+          <thead>
+            <tr>
+              <th class="col-foto">Foto</th>
+              <th>Dokter Spesialis</th>
+              <th>Poli</th>
+              <th class="col-jam">Jam</th>
+            </tr>
+          </thead>
+          <tbody id="tabelKiri">
+            <tr>
+              <td colspan="4" class="loading">
+                <div class="spinner"></div>
+                <p>Memuat...</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="jadwal-table">
+          <thead>
+            <tr>
+              <th class="col-foto">Foto</th>
+              <th>Dokter Spesialis</th>
+              <th>Poli</th>
+              <th class="col-jam">Jam</th>
+            </tr>
+          </thead>
+          <tbody id="tabelKanan">
+            <tr>
+              <td colspan="4" class="loading">
+                <div class="spinner"></div>
+                <p>Memuat...</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Pagination -->
@@ -74,12 +96,13 @@
     // ====== KONFIGURASI ======
     const FILE_JADWAL = 'jadwal.json';
 
-    // Jumlah dokter per halaman. Sesuaikan dengan tinggi layar display.
-    // Untuk TV display, 6–8 biasanya pas. Kalau layar besar, bisa 10.
-    const PER_HALAMAN = 8;
+    // Total dokter per HALAMAN (dibagi ke 2 tabel).
+    // PER_HALAMAN = 8 → tiap tabel isi 4 dokter.
+    // PER_HALAMAN = 10 → tiap tabel isi 5 dokter.
+    const PER_HALAMAN = 10;
 
     // Auto-rotate halaman (ms). Set 0 untuk matikan.
-    const AUTO_ROTATE_MS = 8000; // 8 detik per halaman
+    const AUTO_ROTATE_MS = 10000;
 
     const LABEL_HARI = {
       senin: 'Senin', selasa: 'Selasa', rabu: 'Rabu',
@@ -109,7 +132,7 @@
     let totalHalaman = 1;
     let rotateTimer = null;
 
-    // ====== AMBIL DATA SESUAI FILTER ======
+    // ====== FILTER DATA ======
     function dataTerfilter() {
       if (hariAktif === 'semua') return semuaData;
       return semuaData.filter(d =>
@@ -118,21 +141,55 @@
       );
     }
 
+    // ====== BUAT HTML SATU BARIS ======
+    function barisHTML(d, i) {
+      const fotoSrc = d.foto && d.foto.trim() !== ''
+        ? d.foto
+        : 'https://placehold.co/200x200/e0f2fe/0066a1?text=DR';
+
+      const hariTeks = (d.hari || [])
+        .map(h => LABEL_HARI[h.toLowerCase()] || h)
+        .join(', ');
+
+      const badgeClass = WARNA_POLI[d.poli] || 'badge-blue';
+
+      return `
+        <tr style="animation-delay:${i * 40}ms">
+          <td class="col-foto">
+            <img class="foto-dokter" src="${fotoSrc}" alt="${d.nama}"
+                 onerror="this.src='https://placehold.co/200x200/e0f2fe/0066a1?text=DR';" />
+          </td>
+          <td>
+            <div class="nama-dokter">${d.nama}</div>
+            <div class="spesialis">${d.spesialis}</div>
+            <div class="hari-inline"><span class="hari-label">Hari:</span> ${hariTeks}</div>
+          </td>
+          <td><span class="badge ${badgeClass}">${d.poli}</span></td>
+          <td class="col-jam"><span class="jam">${d.jam}</span></td>
+        </tr>
+      `;
+    }
+
     // ====== RENDER HALAMAN ======
     function renderHalaman() {
-      const tbody = document.getElementById('tabelJadwal');
+      const tbodyKiri = document.getElementById('tabelKiri');
+      const tbodyKanan = document.getElementById('tabelKanan');
       const infoEl = document.getElementById('infoJumlah');
       const pagEl = document.getElementById('pagination');
 
       const data = dataTerfilter();
       totalHalaman = Math.max(1, Math.ceil(data.length / PER_HALAMAN));
 
-      // Kalau halaman aktif kelewat (misal filter berubah), reset
       if (halamanAktif > totalHalaman) halamanAktif = 1;
 
       const start = (halamanAktif - 1) * PER_HALAMAN;
       const end = start + PER_HALAMAN;
       const potongan = data.slice(start, end);
+
+      // Bagi 2: separuh kiri, separuh kanan
+      const tengah = Math.ceil(potongan.length / 2);
+      const kiri = potongan.slice(0, tengah);
+      const kanan = potongan.slice(tengah);
 
       // Info jumlah
       if (data.length === 0) {
@@ -141,11 +198,11 @@
         infoEl.textContent = `Menampilkan ${start + 1}–${Math.min(end, data.length)} dari ${data.length} jadwal dokter`;
       }
 
-      // Render isi tabel
+      // Empty state
       if (potongan.length === 0) {
-        tbody.innerHTML = `
+        const emptyHTML = `
           <tr>
-            <td colspan="5">
+            <td colspan="4">
               <div class="empty-state">
                 <div class="empty-icon">🗓️</div>
                 <h3>Tidak ada dokter di hari ini</h3>
@@ -153,43 +210,41 @@
               </div>
             </td>
           </tr>`;
+        tbodyKiri.innerHTML = emptyHTML;
+        tbodyKanan.innerHTML = `
+          <tr>
+            <td colspan="4">
+              <div class="empty-state">
+                <div class="empty-icon">—</div>
+                <p>&nbsp;</p>
+              </div>
+            </td>
+          </tr>`;
         pagEl.innerHTML = '';
         return;
       }
 
-      tbody.innerHTML = potongan.map((d, i) => {
-        const fotoSrc = d.foto && d.foto.trim() !== ''
-          ? d.foto
-          : 'https://placehold.co/200x200/e0f2fe/0066a1?text=DR';
+      tbodyKiri.innerHTML = kiri.map((d, i) => barisHTML(d, i)).join('');
 
-        const hariTeks = (d.hari || [])
-          .map(h => LABEL_HARI[h.toLowerCase()] || h)
-          .join(', ');
-
-        const badgeClass = WARNA_POLI[d.poli] || 'badge-blue';
-
-        return `
-          <tr style="animation-delay:${i * 40}ms">
-            <td class="col-foto">
-              <img class="foto-dokter" src="${fotoSrc}" alt="${d.nama}"
-                   onerror="this.src='https://placehold.co/200x200/e0f2fe/0066a1?text=DR';" />
+      // Kalau kanan kosong (jumlah ganjil), tampilkan placeholder kosong
+      if (kanan.length === 0) {
+        tbodyKanan.innerHTML = `
+          <tr>
+            <td colspan="4">
+              <div class="empty-state">
+                <div class="empty-icon">—</div>
+                <p>&nbsp;</p>
+              </div>
             </td>
-            <td>
-              <div class="nama-dokter">${d.nama}</div>
-              <div class="spesialis">${d.spesialis}</div>
-            </td>
-            <td><span class="badge ${badgeClass}">${d.poli}</span></td>
-            <td class="hari-cell">${hariTeks}</td>
-            <td class="col-jam"><span class="jam">${d.jam}</span></td>
-          </tr>
-        `;
-      }).join('');
+          </tr>`;
+      } else {
+        tbodyKanan.innerHTML = kanan.map((d, i) => barisHTML(d, i)).join('');
+      }
 
-      // Render pagination
       renderPagination();
     }
 
-    // ====== RENDER PAGINATION ======
+    // ====== PAGINATION ======
     function renderPagination() {
       const pagEl = document.getElementById('pagination');
 
@@ -269,9 +324,9 @@
       })
       .catch(err => {
         console.error(err);
-        document.getElementById('tabelJadwal').innerHTML = `
+        const errHTML = `
           <tr>
-            <td colspan="5">
+            <td colspan="4">
               <div class="empty-state">
                 <div class="empty-icon">⚠️</div>
                 <h3>Gagal memuat data</h3>
@@ -279,6 +334,8 @@
               </div>
             </td>
           </tr>`;
+        document.getElementById('tabelKiri').innerHTML = errHTML;
+        document.getElementById('tabelKanan').innerHTML = '';
       });
 
     // ====== EVENT FILTER HARI ======
