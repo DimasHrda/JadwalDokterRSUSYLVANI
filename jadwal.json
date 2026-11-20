@@ -1,0 +1,343 @@
+[
+  {
+    "nama": "dr. H. Sugianto, Sp. OG, MKM, AIFO-K, MBA",
+    "spesialis": "Spesialis Obgyn",
+    "poli": "Poli Obgyn",
+    "hari": ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"],
+    "jam": "16.00 - 20.00 WIB",
+    "foto": "foto/sugianto.jpg"
+  },
+  {
+    "nama": "dr. Nova Violin Wijaya, Sp. OG",
+    "spesialis": "Spesialis Obgyn",
+    "poli": "Poli Obgyn",
+    "hari": ["kamis"],
+    "jam": "09.00 - 12.00 WIB",
+    "foto": "foto/nova.jpg"
+  },
+  {
+    "nama": "dr. Nova Violin Wijaya, Sp. OG",
+    "spesialis": "Spesialis Obgyn",
+    "poli": "Poli Obgyn",
+    "hari": ["jumat"],
+    "jam": "08.00 - 10.00 WIB",
+    "foto": "foto/nova.jpg"
+  },
+  {
+    "nama": "dr. H.M. Faisal Fahmi, M. Ked (OG), Sp. OG",
+    "spesialis": "Spesialis Obgyn",
+    "poli": "Poli Obgyn",
+    "hari": ["senin", "rabu", "sabtu"],
+    "jam": "11.00 - 13.00 WIB",
+    "foto": "foto/faisal.jpg"
+  },
+  {
+    "nama": "dr. H.M. Faisal Fahmi, M. Ked (OG), Sp. OG",
+    "spesialis": "Spesialis Obgyn",
+    "poli": "Poli Obgyn",
+    "hari": ["jumat"],
+    "jam": "10.00 - 12.00 WIB",
+    "foto": "foto/faisal.jpg"
+  },
+  {
+    "nama": "dr. Teuku Johan Avicenna, Sp. OG",
+    "spesialis": "Spesialis Obgyn",
+    "poli": "Poli Obgyn",
+    "hari": ["senin", "rabu", "jumat"],
+    "jam": "14.00 - 16.00 WIB",
+    "foto": "foto/teuku.jpg"
+  },
+  {
+    "nama": "dr. Tri Sugeng Hariadi, Sp. OG",
+    "spesialis": "Spesialis Obgyn",
+    "poli": "Poli Obgyn",
+    "hari": ["selasa"],
+    "jam": "11.00 - 13.00 WIB",
+    "foto": "foto/tri.jpg"
+  },
+
+  {
+    "nama": "dr. H. Agusnadi Talah, Sp. A",
+    "spesialis": "Spesialis Anak",
+    "poli": "Poli Anak",
+    "hari": ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"],
+    "jam": "10.00 - 12.00 WIB",
+    "foto": "foto/agusnadi.jpg"
+  },
+  {
+    "nama": "dr. Wirawan Siregar, M. Ked (Ped), Sp. A",
+    "spesialis": "Spesialis Anak",
+    "poli": "Poli Anak",
+    "hari": ["senin", "selasa", "rabu", "kamis", "jumat"],
+    "jam": "16.00 - 18.00 WIB",
+    "foto": "foto/wirawan.jpg"
+  },
+  {
+    "nama": "dr. Wirawan Siregar, M. Ked (Ped), Sp. A",
+    "spesialis": "Spesialis Anak",
+    "poli": "Poli Anak",
+    "hari": ["sabtu"],
+    "jam": "13.00 - 14.30 WIB",
+    "foto": "foto/wirawan.jpg"
+  },
+  {
+    "nama": "dr. Handyka Vebi G., Sp. A",
+    "spesialis": "Spesialis Anak",
+    "poli": "Poli Anak",
+    "hari": ["senin", "rabu"],
+    "jam": "13.00 - 15.00 WIB",
+    "foto": "foto/handyka.jpg"
+  },
+  {
+    "nama": "dr. Handyka Vebi G., Sp. A",
+    "spesialis": "Spesialis Anak",
+    "poli": "Poli Anak",
+    "hari": ["kamis", "jumat"],
+    "jam": "08.00 - 10.00 WIB",
+    "foto": "foto/handyka.jpg"
+  },
+
+  {
+    "nama": "dr. Aizil Rivai, Sp. PD",
+    "spesialis": "Spesialis Penyakit Dalam",
+    "poli": "Poli Penyakit Dalam",
+    "hari": ["senin", "selasa", "rabu", "kamis", "sabtu"],
+    "jam": "10.00 - 13.00 WIB",
+    "foto": "foto/aizil.jpg"
+  },
+  {
+    "nama": "dr. Aizil Rivai, Sp. PD",
+    "spesialis": "Spesialis Penyakit Dalam",
+    "poli": "Poli Penyakit Dalam",
+    "hari": ["jumat"],
+    "jam": "09.30 - 12.00 WIB",
+    "foto": "foto/aizil.jpg"
+  },
+  {
+    "nama": "dr. Idwan Haris, Sp. PD",
+    "spesialis": "Spesialis Penyakit Dalam",
+    "poli": "Poli Penyakit Dalam",
+    "hari": ["senin", "rabu", "jumat"],
+    "jam": "17.00 - 20.30 WIB",
+    "foto": "foto/idwan.jpg"
+  },
+  {
+    "nama": "dr. Idwan Haris, Sp. PD",
+    "spesialis": "Spesialis Penyakit Dalam",
+    "poli": "Poli Penyakit Dalam",
+    "hari": ["selasa", "kamis"],
+    "jam": "14.00 - 20.00 WIB",
+    "foto": "foto/idwan.jpg"
+  },
+  {
+    "nama": "dr. Edyan Pinem, Sp. PD",
+    "spesialis": "Spesialis Penyakit Dalam",
+    "poli": "Poli Penyakit Dalam",
+    "hari": ["senin", "rabu", "jumat"],
+    "jam": "13.00 - 15.00 WIB",
+    "foto": "foto/edyan.jpg"
+  },
+  {
+    "nama": "dr. Khalid Huda Sagala, Sp.PD",
+    "spesialis": "Spesialis Penyakit Dalam",
+    "poli": "Poli Penyakit Dalam",
+    "hari": ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"],
+    "jam": "14.30 - 16.30 WIB",
+    "foto": "foto/khalid.jpg"
+  },
+
+  {
+    "nama": "dr. Wina Fuad Lubis, M. Ked (Oph), Sp. M",
+    "spesialis": "Spesialis Mata",
+    "poli": "Poli Mata",
+    "hari": ["senin", "jumat"],
+    "jam": "10.00 - 13.00 WIB",
+    "foto": "foto/wina.jpg"
+  },
+  {
+    "nama": "dr. Oriza Sativa, Sp. M",
+    "spesialis": "Spesialis Mata",
+    "poli": "Poli Mata",
+    "hari": ["selasa", "rabu", "kamis"],
+    "jam": "09.00 - 13.00 WIB",
+    "foto": "foto/oriza.jpg"
+  },
+  {
+    "nama": "dr. Faiza Sofia S., M. Ked (Oph), Sp. M",
+    "spesialis": "Spesialis Mata",
+    "poli": "Poli Mata",
+    "hari": ["selasa", "rabu"],
+    "jam": "13.30 - 15.30 WIB",
+    "foto": "foto/faiza.jpg"
+  },
+  {
+    "nama": "dr. Faiza Sofia S., M. Ked (Oph), Sp. M",
+    "spesialis": "Spesialis Mata",
+    "poli": "Poli Mata",
+    "hari": ["kamis"],
+    "jam": "17.00 - 19.00 WIB",
+    "foto": "foto/faiza.jpg"
+  },
+
+  {
+    "nama": "dr. Abdi Gunawan, Sp. B",
+    "spesialis": "Spesialis Bedah",
+    "poli": "Poli Bedah",
+    "hari": ["senin", "selasa", "rabu", "kamis"],
+    "jam": "14.15 - 16.00 WIB",
+    "foto": "foto/abdi.jpg"
+  },
+  {
+    "nama": "dr. Abdi Gunawan, Sp. B",
+    "spesialis": "Spesialis Bedah",
+    "poli": "Poli Bedah",
+    "hari": ["jumat", "sabtu"],
+    "jam": "12.15 - 14.00 WIB",
+    "foto": "foto/abdi.jpg"
+  },
+  {
+    "nama": "dr. Rizki Irwansyah S., M. Ked (Surg), Sp. B",
+    "spesialis": "Spesialis Bedah",
+    "poli": "Poli Bedah",
+    "hari": ["sabtu"],
+    "jam": "17.00 - 19.00 WIB",
+    "foto": "foto/rizki.jpg"
+  },
+  {
+    "nama": "dr. M. Ibnu Kaesar Purba, M. Ked (Surg), Sp. B",
+    "spesialis": "Spesialis Bedah",
+    "poli": "Poli Bedah",
+    "hari": ["kamis", "jumat"],
+    "jam": "08.30 - 10.30 WIB",
+    "foto": "foto/ibnu.jpg"
+  },
+
+  {
+    "nama": "dr. Darma Malem Sembiring, Sp. THT-KL",
+    "spesialis": "Spesialis THT-KL",
+    "poli": "Poli THT",
+    "hari": ["selasa", "kamis", "jumat"],
+    "jam": "10.00 - 12.00 WIB",
+    "foto": "foto/darma.jpg"
+  },
+  {
+    "nama": "dr. Poppy Sartika Nazar, Sp. THT-KL",
+    "spesialis": "Spesialis THT-KL",
+    "poli": "Poli THT",
+    "hari": ["senin", "rabu"],
+    "jam": "15.30 - 17.00 WIB",
+    "foto": "foto/poppy.jpg"
+  },
+  {
+    "nama": "dr. Poppy Sartika Nazar, Sp. THT-KL",
+    "spesialis": "Spesialis THT-KL",
+    "poli": "Poli THT",
+    "hari": ["selasa"],
+    "jam": "16.00 - 17.30 WIB",
+    "foto": "foto/poppy.jpg"
+  },
+  {
+    "nama": "dr. Poppy Sartika Nazar, Sp. THT-KL",
+    "spesialis": "Spesialis THT-KL",
+    "poli": "Poli THT",
+    "hari": ["sabtu"],
+    "jam": "15.30 - 17.00 WIB",
+    "foto": "foto/poppy.jpg"
+  },
+
+  {
+    "nama": "dr. Cindy Ayuningtyas S., Sp. JP",
+    "spesialis": "Spesialis Jantung",
+    "poli": "Poli Jantung",
+    "hari": ["senin", "jumat"],
+    "jam": "13.30 - 16.00 WIB",
+    "foto": "foto/cindy.jpg"
+  },
+  {
+    "nama": "dr. Cindy Ayuningtyas S., Sp. JP",
+    "spesialis": "Spesialis Jantung",
+    "poli": "Poli Jantung",
+    "hari": ["rabu"],
+    "jam": "09.00 - 12.00 WIB",
+    "foto": "foto/cindy.jpg"
+  },
+
+  {
+    "nama": "dr. Rudi Chandra, M. Ked, Sp. DV",
+    "spesialis": "Spesialis Kulit & Kelamin",
+    "poli": "Poli Kulit",
+    "hari": ["senin", "rabu", "kamis"],
+    "jam": "10.00 - 12.30 WIB",
+    "foto": "foto/rudi.jpg"
+  },
+
+  {
+    "nama": "dr. Denis H. Siregar, M. Ked (Neu), Sp. N, FIN",
+    "spesialis": "Spesialis Saraf",
+    "poli": "Poli Saraf",
+    "hari": ["senin", "selasa", "kamis", "jumat"],
+    "jam": "15.00 - 17.00 WIB",
+    "foto": "foto/denis.jpg"
+  },
+
+  {
+    "nama": "dr. Efriyandi, M. Ked (Paru), Sp. P",
+    "spesialis": "Spesialis Paru",
+    "poli": "Poli Paru",
+    "hari": ["senin"],
+    "jam": "11.15 - 14.00 WIB",
+    "foto": "foto/efriyandi.jpg"
+  },
+  {
+    "nama": "dr. Efriyandi, M. Ked (Paru), Sp. P",
+    "spesialis": "Spesialis Paru",
+    "poli": "Poli Paru",
+    "hari": ["selasa", "jumat"],
+    "jam": "09.00 - 11.30 WIB",
+    "foto": "foto/efriyandi.jpg"
+  },
+
+  {
+    "nama": "dr. Silvy Agustina Hasibuan, Sp. KJ",
+    "spesialis": "Spesialis Jiwa",
+    "poli": "Poli Jiwa",
+    "hari": ["rabu", "kamis"],
+    "jam": "17.30 - 18.30 WIB",
+    "foto": "foto/silvy.jpg"
+  },
+  {
+    "nama": "dr. Silvy Agustina Hasibuan, Sp. KJ",
+    "spesialis": "Spesialis Jiwa",
+    "poli": "Poli Jiwa",
+    "hari": ["sabtu"],
+    "jam": "10.00 - 12.00 WIB",
+    "foto": "foto/silvy.jpg"
+  },
+
+  {
+    "nama": "dr. Abdurrahman Huzaifi Lubis, Sp. Ort. Tr",
+    "spesialis": "Spesialis Ortopedi",
+    "poli": "Poli Ortopedi",
+    "hari": ["selasa", "rabu", "kamis"],
+    "jam": "11.30 - 14.00 WIB",
+    "foto": "foto/abdurrahman.jpg"
+  },
+
+  {
+    "nama": "dr. Churchil Hermes Havana Sitompul, Sp. KFR",
+    "spesialis": "Spesialis Rehabilitasi Medik",
+    "poli": "R. Medik",
+    "hari": ["senin", "rabu", "jumat"],
+    "jam": "14.00 - 17.00 WIB",
+    "foto": "foto/churchil.jpg"
+  },
+
+  {
+    "nama": "drg. Belinda Permata Shela Tarigan",
+    "spesialis": "Dokter Gigi",
+    "poli": "Poli Gigi",
+    "hari": ["senin", "selasa", "rabu", "kamis", "jumat"],
+    "jam": "09.00 - 14.00 WIB",
+    "foto": "foto/belinda.jpg"
+  }
+]

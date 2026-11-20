@@ -1,0 +1,537 @@
+/* ====== RESET & BASE ====== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #0b6fa4;
+  --primary-dark: #084f75;
+  --primary-light: #e0f2fe;
+  --accent: #06b6d4;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --radius: 18px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.07);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 36px 0 48px;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ====== ORNAMEN BACKGROUND ====== */
+.bg-ornament {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-ornament-1 {
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, #7dd3fc, #06b6d4);
+  top: -200px;
+  left: -150px;
+}
+
+.bg-ornament-2 {
+  width: 450px;
+  height: 450px;
+  background: linear-gradient(135deg, #bae6fd, #a5b4fc);
+  bottom: -180px;
+  right: -120px;
+}
+
+/* ====== CONTAINER (lebih lebar) ====== */
+.container {
+  width: 94%;
+  max-width: 1360px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ====== HEADER ====== */
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.badge-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  color: var(--primary);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+
+.badge-top .dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2); }
+  50%      { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.1); }
+}
+
+.judul-halaman {
+  font-size: clamp(28px, 4.5vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  background: linear-gradient(135deg, #0b6fa4 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 8px;
+}
+
+.subjudul {
+  color: var(--text-muted);
+  font-size: 16px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ====== FILTER CHIP (lebih besar) ====== */
+.filter-hari {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.chip {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.chip.active {
+  background: linear-gradient(135deg, #0b6fa4, #06b6d4);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(11, 111, 164, 0.3);
+}
+
+/* ====== INFO JUMLAH ====== */
+.info-jumlah {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  min-height: 22px;
+  font-weight: 500;
+}
+
+/* ====== TABLE (DIPERBESAR) ====== */
+.table-wrapper {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.jadwal-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.jadwal-table thead {
+  background: linear-gradient(135deg, #0b6fa4 0%, #0e88c4 100%);
+  color: #fff;
+}
+
+.jadwal-table thead th {
+  padding: 18px 22px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.jadwal-table thead th.col-foto {
+  width: 110px;
+  text-align: center;
+}
+
+.jadwal-table thead th.col-jam {
+  text-align: right;
+  width: 200px;
+}
+
+/* Lebar kolom tetap supaya stabil antar halaman */
+.jadwal-table thead th:nth-child(2) { width: 32%; }
+.jadwal-table thead th:nth-child(3) { width: 16%; }
+.jadwal-table thead th:nth-child(4) { width: 20%; }
+
+.jadwal-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s ease;
+  animation: fadeRow 0.35s ease both;
+}
+
+.jadwal-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.jadwal-table tbody tr:hover {
+  background: #f0f9ff;
+}
+
+@keyframes fadeRow {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Baris lebih tinggi & padding lebih besar */
+.jadwal-table td {
+  padding: 20px 22px;
+  vertical-align: middle;
+  font-size: 16px;
+  height: 96px;
+}
+
+.jadwal-table td.col-foto {
+  text-align: center;
+}
+
+.jadwal-table td.col-jam {
+  text-align: right;
+}
+
+/* Foto dokter lebih besar */
+.foto-dokter {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  outline: 3px solid var(--primary-light);
+  display: inline-block;
+  background: #eef2f7;
+  transition: transform 0.3s ease;
+}
+
+.jadwal-table tbody tr:hover .foto-dokter {
+  transform: scale(1.05);
+}
+
+/* Nama & spesialis lebih besar */
+.nama-dokter {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.spesialis {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+/* Hari */
+.hari-cell {
+  color: #334155;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* Jam lebih besar & menonjol */
+.jam {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 16px;
+  background: var(--primary-light);
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ====== BADGE POLI (lebih besar) ====== */
+.badge {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.badge-blue    { background: #dbeafe; color: #1e40af; }
+.badge-pink    { background: #fce7f3; color: #9d174d; }
+.badge-purple  { background: #ede9fe; color: #5b21b6; }
+.badge-teal    { background: #ccfbf1; color: #115e59; }
+.badge-orange  { background: #ffedd5; color: #9a3412; }
+.badge-sky     { background: #e0f2fe; color: #075985; }
+.badge-red     { background: #fee2e2; color: #991b1b; }
+.badge-indigo  { background: #e0e7ff; color: #3730a3; }
+.badge-rose    { background: #ffe4e6; color: #9f1239; }
+.badge-amber   { background: #fef3c7; color: #92400e; }
+.badge-lime    { background: #ecfccb; color: #3f6212; }
+.badge-cyan    { background: #cffafe; color: #155e75; }
+.badge-slate   { background: #f1f5f9; color: #334155; }
+.badge-fuchsia { background: #fae8ff; color: #86198f; }
+.badge-emerald { background: #d1fae5; color: #065f46; }
+
+/* ====== PAGINATION (lebih besar) ====== */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  min-height: 44px;
+}
+
+.nav-btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.nomor-halaman {
+  display: flex;
+  gap: 6px;
+}
+
+.page-num {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.page-num:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.page-num.active {
+  background: linear-gradient(135deg, #0b6fa4, #06b6d4);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(11, 111, 164, 0.3);
+}
+
+/* ====== LOADING & EMPTY ====== */
+.loading {
+  text-align: center;
+  padding: 60px 20px !important;
+  color: var(--text-muted);
+  font-size: 15px;
+  height: auto !important;
+}
+
+.loading .spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid var(--primary-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 14px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 50px 24px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.empty-state p {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.empty-state code {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* ====== NOTE ====== */
+.note {
+  margin-top: 18px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ====== RESPONSIF ====== */
+@media (max-width: 900px) {
+  .jadwal-table thead th:nth-child(2) { width: 38%; }
+  .jadwal-table thead th:nth-child(3) { width: 18%; }
+  .jadwal-table thead th:nth-child(4) { width: 22%; }
+
+  .jadwal-table td {
+    padding: 16px 16px;
+    font-size: 15px;
+    height: 84px;
+  }
+
+  .foto-dokter {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    padding: 24px 0 36px;
+  }
+
+  .container {
+    width: 96%;
+  }
+
+  .filter-hari {
+    border-radius: 16px;
+    padding: 8px;
+  }
+
+  .chip {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  .jadwal-table thead th {
+    padding: 12px 10px;
+    font-size: 11px;
+  }
+
+  .jadwal-table td {
+    padding: 12px 10px;
+    height: auto;
+    font-size: 13px;
+  }
+
+  .foto-dokter {
+    width: 48px;
+    height: 48px;
+    border-width: 3px;
+    outline-width: 2px;
+  }
+
+  .nama-dokter { font-size: 14px; }
+  .spesialis { font-size: 11.5px; }
+  .hari-cell { font-size: 12px; }
+  .jam { font-size: 13px; padding: 4px 10px; }
+  .badge { font-size: 10.5px; padding: 3px 9px; }
+
+  /* Sembunyikan kolom hari di layar sangat kecil */
+  .jadwal-table thead th:nth-child(4),
+  .jadwal-table tbody td:nth-child(4) {
+    display: none;
+  }
+}

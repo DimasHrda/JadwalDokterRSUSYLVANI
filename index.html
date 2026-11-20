@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jadwal Dokter - RSU Sylvani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="bg-ornament bg-ornament-1"></div>
+  <div class="bg-ornament bg-ornament-2"></div>
+
+  <main class="container">
+
+    <!-- Header -->
+    <header class="page-header">
+      <div class="badge-top">
+        <span class="dot"></span> RSU Sylvani
+      </div>
+      <h1 class="judul-halaman">Jadwal Praktik Dokter</h1>
+      <p class="subjudul">Temukan jadwal dokter spesialis dan umum dengan mudah.</p>
+    </header>
+
+    <!-- Filter hari -->
+    <nav class="filter-hari" id="filterHari" aria-label="Filter hari">
+      <button class="chip active" data-hari="semua">Semua</button>
+      <button class="chip" data-hari="senin">Senin</button>
+      <button class="chip" data-hari="selasa">Selasa</button>
+      <button class="chip" data-hari="rabu">Rabu</button>
+      <button class="chip" data-hari="kamis">Kamis</button>
+      <button class="chip" data-hari="jumat">Jumat</button>
+      <button class="chip" data-hari="sabtu">Sabtu</button>
+      <button class="chip" data-hari="minggu">Minggu</button>
+    </nav>
+
+    <!-- Info jumlah -->
+    <div class="info-jumlah" id="infoJumlah"></div>
+
+    <!-- Tabel Jadwal -->
+    <div class="table-wrapper">
+      <table class="jadwal-table">
+        <thead>
+          <tr>
+            <th class="col-foto">Foto</th>
+            <th>Dokter Spesialis</th>
+            <th>Poli</th>
+            <th>Hari</th>
+            <th class="col-jam">Jam Praktik</th>
+          </tr>
+        </thead>
+        <tbody id="tabelJadwal">
+          <tr>
+            <td colspan="5" class="loading">
+              <div class="spinner"></div>
+              <p>Memuat jadwal dokter...</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+
+    <p class="note">Jadwal dapat berubah sewaktu-waktu. Hubungi rumah sakit untuk konfirmasi.</p>
+
+  </main>
+
+  <script>
+    // ====== KONFIGURASI ======
+    const FILE_JADWAL = 'jadwal.json';
+
+    // Jumlah dokter per halaman. Sesuaikan dengan tinggi layar display.
+    // Untuk TV display, 6–8 biasanya pas. Kalau layar besar, bisa 10.
+    const PER_HALAMAN = 8;
+
+    // Auto-rotate halaman (ms). Set 0 untuk matikan.
+    const AUTO_ROTATE_MS = 8000; // 8 detik per halaman
+
+    const LABEL_HARI = {
+      senin: 'Senin', selasa: 'Selasa', rabu: 'Rabu',
+      kamis: 'Kamis', jumat: 'Jumat', sabtu: 'Sabtu', minggu: 'Minggu'
+    };
+
+    const WARNA_POLI = {
+      'Poli Obgyn':          'badge-pink',
+      'Poli Anak':           'badge-blue',
+      'Poli Penyakit Dalam': 'badge-purple',
+      'Poli Mata':           'badge-sky',
+      'Poli Bedah':          'badge-red',
+      'Poli THT':            'badge-indigo',
+      'Poli Jantung':        'badge-rose',
+      'Poli Kulit':          'badge-amber',
+      'Poli Saraf':          'badge-lime',
+      'Poli Paru':           'badge-cyan',
+      'Poli Jiwa':           'badge-fuchsia',
+      'Poli Ortopedi':       'badge-emerald',
+      'R. Medik':            'badge-slate',
+      'Poli Gigi':           'badge-teal'
+    };
+
+    let semuaData = [];
+    let hariAktif = 'semua';
+    let halamanAktif = 1;
+    let totalHalaman = 1;
+    let rotateTimer = null;
+
+    // ====== AMBIL DATA SESUAI FILTER ======
+    function dataTerfilter() {
+      if (hariAktif === 'semua') return semuaData;
+      return semuaData.filter(d =>
+        Array.isArray(d.hari) &&
+        d.hari.map(h => h.toLowerCase()).includes(hariAktif)
+      );
+    }
+
+    // ====== RENDER HALAMAN ======
+    function renderHalaman() {
+      const tbody = document.getElementById('tabelJadwal');
+      const infoEl = document.getElementById('infoJumlah');
+      const pagEl = document.getElementById('pagination');
+
+      const data = dataTerfilter();
+      totalHalaman = Math.max(1, Math.ceil(data.length / PER_HALAMAN));
+
+      // Kalau halaman aktif kelewat (misal filter berubah), reset
+      if (halamanAktif > totalHalaman) halamanAktif = 1;
+
+      const start = (halamanAktif - 1) * PER_HALAMAN;
+      const end = start + PER_HALAMAN;
+      const potongan = data.slice(start, end);
+
+      // Info jumlah
+      if (data.length === 0) {
+        infoEl.textContent = '';
+      } else {
+        infoEl.textContent = `Menampilkan ${start + 1}–${Math.min(end, data.length)} dari ${data.length} jadwal dokter`;
+      }
+
+      // Render isi tabel
+      if (potongan.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">
+                <div class="empty-icon">🗓️</div>
+                <h3>Tidak ada dokter di hari ini</h3>
+                <p>Silakan pilih hari lain atau lihat "Semua".</p>
+              </div>
+            </td>
+          </tr>`;
+        pagEl.innerHTML = '';
+        return;
+      }
+
+      tbody.innerHTML = potongan.map((d, i) => {
+        const fotoSrc = d.foto && d.foto.trim() !== ''
+          ? d.foto
+          : 'https://placehold.co/200x200/e0f2fe/0066a1?text=DR';
+
+        const hariTeks = (d.hari || [])
+          .map(h => LABEL_HARI[h.toLowerCase()] || h)
+          .join(', ');
+
+        const badgeClass = WARNA_POLI[d.poli] || 'badge-blue';
+
+        return `
+          <tr style="animation-delay:${i * 40}ms">
+            <td class="col-foto">
+              <img class="foto-dokter" src="${fotoSrc}" alt="${d.nama}"
+                   onerror="this.src='https://placehold.co/200x200/e0f2fe/0066a1?text=DR';" />
+            </td>
+            <td>
+              <div class="nama-dokter">${d.nama}</div>
+              <div class="spesialis">${d.spesialis}</div>
+            </td>
+            <td><span class="badge ${badgeClass}">${d.poli}</span></td>
+            <td class="hari-cell">${hariTeks}</td>
+            <td class="col-jam"><span class="jam">${d.jam}</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      // Render pagination
+      renderPagination();
+    }
+
+    // ====== RENDER PAGINATION ======
+    function renderPagination() {
+      const pagEl = document.getElementById('pagination');
+
+      if (totalHalaman <= 1) {
+        pagEl.innerHTML = '';
+        return;
+      }
+
+      let tombol = `
+        <button class="nav-btn" data-aksi="prev" ${halamanAktif === 1 ? 'disabled' : ''}>
+          ‹ Sebelumnya
+        </button>
+        <div class="nomor-halaman">`;
+
+      for (let i = 1; i <= totalHalaman; i++) {
+        tombol += `<button class="page-num ${i === halamanAktif ? 'active' : ''}" data-halaman="${i}">${i}</button>`;
+      }
+
+      tombol += `
+        </div>
+        <button class="nav-btn" data-aksi="next" ${halamanAktif === totalHalaman ? 'disabled' : ''}>
+          Berikutnya ›
+        </button>`;
+
+      pagEl.innerHTML = tombol;
+    }
+
+    // ====== EVENT PAGINATION ======
+    document.getElementById('pagination').addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+
+      if (btn.dataset.aksi === 'prev' && halamanAktif > 1) {
+        halamanAktif--;
+      } else if (btn.dataset.aksi === 'next' && halamanAktif < totalHalaman) {
+        halamanAktif++;
+      } else if (btn.dataset.halaman) {
+        halamanAktif = parseInt(btn.dataset.halaman, 10);
+      } else {
+        return;
+      }
+      renderHalaman();
+      resetAutoRotate();
+    });
+
+    // ====== AUTO ROTATE ======
+    function startAutoRotate() {
+      if (AUTO_ROTATE_MS <= 0) return;
+      stopAutoRotate();
+      rotateTimer = setInterval(() => {
+        if (totalHalaman <= 1) return;
+        halamanAktif = halamanAktif >= totalHalaman ? 1 : halamanAktif + 1;
+        renderHalaman();
+      }, AUTO_ROTATE_MS);
+    }
+
+    function stopAutoRotate() {
+      if (rotateTimer) clearInterval(rotateTimer);
+      rotateTimer = null;
+    }
+
+    function resetAutoRotate() {
+      stopAutoRotate();
+      startAutoRotate();
+    }
+
+    // ====== LOAD DATA ======
+    fetch(FILE_JADWAL)
+      .then(res => {
+        if (!res.ok) throw new Error('Gagal memuat ' + FILE_JADWAL);
+        return res.json();
+      })
+      .then(data => {
+        semuaData = data;
+        renderHalaman();
+        startAutoRotate();
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('tabelJadwal').innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">
+                <div class="empty-icon">⚠️</div>
+                <h3>Gagal memuat data</h3>
+                <p>Pastikan file <code>${FILE_JADWAL}</code> ada di repository.</p>
+              </div>
+            </td>
+          </tr>`;
+      });
+
+    // ====== EVENT FILTER HARI ======
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        hariAktif = chip.dataset.hari;
+        halamanAktif = 1;
+        renderHalaman();
+        resetAutoRotate();
+      });
+    });
+  </script>
+
+</body>
+</html>
