@@ -5,7 +5,7 @@
     "poli": "Poli Obgyn",
     "hari": ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"],
     "jam": "16.00 - 20.00 WIB",
-    "foto": "sugi.png"
+    "foto": "Sugi.png"
   },
   {
     "nama": "dr. Nova Violin Wijaya, Sp. OG",
@@ -341,3 +341,4 @@
     "foto": "belin.png"
   }
 ]
+
