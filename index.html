@@ -22,7 +22,7 @@
         <span class="dot"></span> RSU Sylvani
       </div>
       <h1 class="judul-halaman">Jadwal Praktik Dokter</h1>
-      <p class="subjudul">Temukan jadwal dokter spesialis dan umum dengan mudah.</p>
+      <p class="subjudul">Temukan jadwal dokter spesialis dengan mudah.</p>
     </header>
 
     <!-- Filter hari -->
@@ -92,17 +92,44 @@
 
   </main>
 
+  <!-- ====== TOMBOL PENGATURAN ====== -->
+  <button class="btn-setting" id="btnSetting" title="Atur libur / cuti dokter">
+    <span class="ikon">⚙️</span> Pengaturan
+  </button>
+
+  <!-- ====== OVERLAY ====== -->
+  <div class="panel-overlay" id="panelOverlay"></div>
+
+  <!-- ====== PANEL PENGATURAN ====== -->
+  <aside class="panel-setting" id="panelSetting" aria-hidden="true">
+    <div class="panel-header">
+      <div>
+        <h2>Pengaturan Libur / Cuti</h2>
+        <p>Matikan toggle untuk menandai dokter tutup/cuti</p>
+      </div>
+      <button class="btn-close" id="btnClosePanel" aria-label="Tutup">×</button>
+    </div>
+
+    <div class="panel-body">
+      <div class="panel-hint">
+        💡 Perubahan disimpan otomatis di browser ini. Toggle <b>OFF</b> = dokter tutup/cuti, jam praktiknya diganti badge <b>TUTUP / CUTI</b>.
+      </div>
+      <div id="daftarSetting"></div>
+    </div>
+
+    <div class="panel-footer">
+      <button class="btn-reset" id="btnResetLibur">Reset Semua</button>
+      <button class="btn-selesai" id="btnSelesai">Selesai</button>
+    </div>
+  </aside>
+
   <script>
     // ====== KONFIGURASI ======
     const FILE_JADWAL = 'jadwal.json';
 
-    // Total dokter per HALAMAN (dibagi ke 2 tabel).
-    // PER_HALAMAN = 8 → tiap tabel isi 4 dokter.
-    // PER_HALAMAN = 10 → tiap tabel isi 5 dokter.
     const PER_HALAMAN = 10;
-
-    // Auto-rotate halaman (ms). Set 0 untuk matikan.
     const AUTO_ROTATE_MS = 10000;
+    const STORAGE_KEY = 'rsu_sylvani_libur_v1';
 
     const LABEL_HARI = {
       senin: 'Senin', selasa: 'Selasa', rabu: 'Rabu',
@@ -132,7 +159,33 @@
     let totalHalaman = 1;
     let rotateTimer = null;
 
-    // ====== FILTER DATA ======
+    // Set berisi ID dokter yang sedang libur/cuti.
+    let daftarLibur = new Set();
+
+    // ====== ID UNIK PER BARIS JADWAL ======
+    function buatId(d) {
+      return `${d.nama}||${d.jam}||${d.poli}`;
+    }
+
+    // ====== LOAD / SAVE LIBUR ======
+    function loadLibur() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) daftarLibur = new Set(JSON.parse(raw));
+      } catch (e) {
+        console.warn('Gagal load data libur:', e);
+      }
+    }
+
+    function saveLibur() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...daftarLibur]));
+      } catch (e) {
+        console.warn('Gagal simpan data libur:', e);
+      }
+    }
+
+    // ====== FILTER DATA (tetap tampil walau libur) ======
     function dataTerfilter() {
       if (hariAktif === 'semua') return semuaData;
       return semuaData.filter(d =>
@@ -153,19 +206,30 @@
 
       const badgeClass = WARNA_POLI[d.poli] || 'badge-blue';
 
+      const id = buatId(d);
+      const isLibur = daftarLibur.has(id);
+
+      // Kolom jam: kalau libur, tampilkan badge TUTUP/CUTI
+      const kolomJam = isLibur
+        ? `<span class="jam jam-libur">TUTUP / CUTI</span>`
+        : `<span class="jam">${d.jam}</span>`;
+
       return `
-        <tr style="animation-delay:${i * 40}ms">
+        <tr class="${isLibur ? 'baris-libur' : ''}" style="animation-delay:${i * 40}ms">
           <td class="col-foto">
             <img class="foto-dokter" src="${fotoSrc}" alt="${d.nama}"
                  onerror="this.src='https://placehold.co/200x200/e0f2fe/0066a1?text=DR';" />
           </td>
           <td>
-            <div class="nama-dokter">${d.nama}</div>
+            <div class="nama-dokter">
+              ${d.nama}
+              ${isLibur ? '<span class="badge-libur">Libur</span>' : ''}
+            </div>
             <div class="spesialis">${d.spesialis}</div>
             <div class="hari-inline"><span class="hari-label">Hari:</span> ${hariTeks}</div>
           </td>
           <td><span class="badge ${badgeClass}">${d.poli}</span></td>
-          <td class="col-jam"><span class="jam">${d.jam}</span></td>
+          <td class="col-jam">${kolomJam}</td>
         </tr>
       `;
     }
@@ -186,19 +250,16 @@
       const end = start + PER_HALAMAN;
       const potongan = data.slice(start, end);
 
-      // Bagi 2: separuh kiri, separuh kanan
       const tengah = Math.ceil(potongan.length / 2);
       const kiri = potongan.slice(0, tengah);
       const kanan = potongan.slice(tengah);
 
-      // Info jumlah
       if (data.length === 0) {
         infoEl.textContent = '';
       } else {
         infoEl.textContent = `Menampilkan ${start + 1}–${Math.min(end, data.length)} dari ${data.length} jadwal dokter`;
       }
 
-      // Empty state
       if (potongan.length === 0) {
         const emptyHTML = `
           <tr>
@@ -226,7 +287,6 @@
 
       tbodyKiri.innerHTML = kiri.map((d, i) => barisHTML(d, i)).join('');
 
-      // Kalau kanan kosong (jumlah ganjil), tampilkan placeholder kosong
       if (kanan.length === 0) {
         tbodyKanan.innerHTML = `
           <tr>
@@ -311,7 +371,107 @@
       startAutoRotate();
     }
 
+    // ====== PANEL PENGATURAN ======
+    function renderPanelSetting() {
+      const wadah = document.getElementById('daftarSetting');
+      if (semuaData.length === 0) {
+        wadah.innerHTML = '<p style="text-align:center;color:#64748b;font-size:13px;">Memuat data...</p>';
+        return;
+      }
+
+      const poliMap = {};
+      semuaData.forEach(d => {
+        if (!poliMap[d.poli]) poliMap[d.poli] = [];
+        poliMap[d.poli].push(d);
+      });
+
+      let html = '';
+      Object.keys(poliMap).forEach(poli => {
+        html += `<div style="font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.5px;text-transform:uppercase;margin:14px 0 8px;">${poli}</div>`;
+        poliMap[poli].forEach(d => {
+          const id = buatId(d);
+          const aktif = !daftarLibur.has(id);
+          const foto = d.foto && d.foto.trim() !== ''
+            ? d.foto
+            : 'https://placehold.co/200x200/e0f2fe/0066a1?text=DR';
+          const hariTeks = (d.hari || [])
+            .map(h => LABEL_HARI[h.toLowerCase()] || h)
+            .join(', ');
+
+          html += `
+            <div class="setting-item ${aktif ? '' : 'is-off'}">
+              <img src="${foto}" alt="${d.nama}"
+                   onerror="this.src='https://placehold.co/200x200/e0f2fe/0066a1?text=DR';" />
+              <div class="setting-info">
+                <div class="nama">${d.nama}</div>
+                <div class="detail">${hariTeks} • ${d.jam}</div>
+              </div>
+              <label class="toggle" title="${aktif ? 'Klik untuk tutup/cuti' : 'Klik untuk aktifkan'}">
+                <input type="checkbox" data-id="${encodeURIComponent(id)}" ${aktif ? 'checked' : ''} />
+                <span class="slider"></span>
+              </label>
+            </div>
+          `;
+        });
+      });
+
+      wadah.innerHTML = html;
+
+      wadah.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', (e) => {
+          const id = decodeURIComponent(e.target.dataset.id);
+          if (e.target.checked) {
+            daftarLibur.delete(id);
+          } else {
+            daftarLibur.add(id);
+          }
+          saveLibur();
+
+          const item = e.target.closest('.setting-item');
+          if (item) item.classList.toggle('is-off', !e.target.checked);
+
+          halamanAktif = 1;
+          renderHalaman();
+          resetAutoRotate();
+        });
+      });
+    }
+
+    function bukaPanel() {
+      document.getElementById('panelOverlay').classList.add('open');
+      document.getElementById('panelSetting').classList.add('open');
+      document.getElementById('panelSetting').setAttribute('aria-hidden', 'false');
+      renderPanelSetting();
+    }
+
+    function tutupPanel() {
+      document.getElementById('panelOverlay').classList.remove('open');
+      document.getElementById('panelSetting').classList.remove('open');
+      document.getElementById('panelSetting').setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('btnSetting').addEventListener('click', bukaPanel);
+    document.getElementById('btnClosePanel').addEventListener('click', tutupPanel);
+    document.getElementById('btnSelesai').addEventListener('click', tutupPanel);
+    document.getElementById('panelOverlay').addEventListener('click', tutupPanel);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') tutupPanel();
+    });
+
+    document.getElementById('btnResetLibur').addEventListener('click', () => {
+      if (!confirm('Reset semua status libur/cuti? Semua dokter akan aktif kembali.')) return;
+      daftarLibur.clear();
+      saveLibur();
+      renderPanelSetting();
+      halamanAktif = 1;
+      renderHalaman();
+      resetAutoRotate();
+    });
+
     // ====== LOAD DATA ======
+    loadLibur();
+
     fetch(FILE_JADWAL)
       .then(res => {
         if (!res.ok) throw new Error('Gagal memuat ' + FILE_JADWAL);
